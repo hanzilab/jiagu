@@ -18,7 +18,7 @@
   <!-- ✅ 主場景設定 -->
   <a-scene
     mindar-image="
-      imageTargetSrc: targets.mind; <!-- ✅ 這裡換成你自己的 .mind 檔，例如：my-marker.mind -->
+      imageTargetSrc:che.mind; <!-- ✅ 這裡換成你自己的 .mind 檔，例如：my-marker.mind -->
       autoStart: true;
       uiLoading: true;
       uiError: true;
@@ -34,7 +34,7 @@
     <a-assets>
       <!-- ✅ 這裡是偵測到 marker 後顯示的圖像，你要播放 GIF 的話，把 JPG 換成 GIF 路徑 -->
       <!-- 例如原本是 card1.jpg，改成 your-gif.gif -->
-      <img id="resultImg" src="jiaguche.gif" />  <!-- ✅ ← 換成你的 GIF，例如：名片.gif -->
+     <video id="cheVideo" autoplay loop muted playsinline src="jiaguche.mp4"></video>  <!-- ✅ ← 換成你的 GIF，例如：名片.gif -->
     </a-assets>
 
     <!-- ✅ 環境光 -->
@@ -46,7 +46,7 @@
     <!-- ✅ Marker 偵測到時顯示的內容 -->
     <a-entity id="marker" mindar-image-target="targetIndex: 0">
       <!-- ✅ 顯示圖片的平面：這裡 src 對應上面的 id="resultImg"，不用改，但圖檔要是 GIF -->
-      <a-plane src="#resultImg" width="1.2" height="0.7" position="0 0 0"></a-plane>
+      <a-plane src="chevideo" width="1.2" height="0.7" position="0 0 0"></a-plane>
     </a-entity>
 
   </a-scene>
