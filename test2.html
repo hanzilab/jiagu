@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MindAR GIF Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      .gif-player {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none;
+        z-index: 10;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gifPlayer" class="gif-player">
+      <img id="gifImage" src="jiaguche.gif" width="300" />
+    </div>
+
+    <a-scene mindar-image="imageTargetSrc: ./assets/marker1.mind; autoStart: true;" embedded color-space="sRGB" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
+      <a-assets>
+        <img id="placeholder" src="車.png" />
+      </a-assets>
+
+      <!-- Marker 1 -->
+      <a-entity mindar-image-target="targets.mind">
+        <a-plane position="0 0 0" width="1" height="1" src="#placeholder"></a-plane>
+      </a-entity>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    </a-scene>
+
+    <script>
+      AFRAME.registerComponent('mindar-listener', {
+        init: function () {
+          const gifPlayer = document.getElementById("gifPlayer");
+          const gifImage = document.getElementById("gifImage");
+
+          this.el.sceneEl.addEventListener("targetFound", (event) => {
+            const targetIndex = event.detail.targetIndex;
+            console.log("Target found:", targetIndex);
+
+            // 對應 GIF 播放
+            if (targetIndex === 0) {
+              gifImage.src = "jiaghche.gif";
+            } else if (targetIndex === 1) {
+              gifImage.src = "jiaguche.gif";
+            }
+
+            gifPlayer.style.display = "block";
+          });
+
+          this.el.sceneEl.addEventListener("targetLost", () => {
+            console.log("Target lost");
+            gifPlayer.style.display = "none";
+          });
+        }
+      });
+
+      document.querySelector("a-scene").setAttribute("mindar-listener", "");
+    </script>
+  </body>
+</html>
