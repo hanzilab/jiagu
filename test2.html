@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <title>AR with Video</title>
-  <!-- 正确的 A-Frame & MindAR CDN -->
+  <!-- 正確的 A-Frame & MindAR CDN -->
   <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   <style>
@@ -40,11 +40,11 @@
     <a-camera look-controls="enabled: false"></a-camera>
 
     <a-entity id="marker" mindar-image-target="targetIndex: 0">
-      <a-video id="car-video" src="#car-video" width="1.2" height="0.7" position="0 0 0" rotation="0 0 0"></a-video>
+      <a-video src="#car-video" width="1.2" height="0.7" position="0 0 0" rotation="0 0 0"></a-video>
     </a-entity>
 
     <a-assets>
-      <!-- 加载影片并设置 ID，添加 muted 属性 -->
+      <!-- 加載影片並設置 ID，添加 muted 属性 -->
       <video id="car-video" src="car.mp4" autoplay loop="true" crossorigin="anonymous" muted></video>
     </a-assets>
   </a-scene>
@@ -71,17 +71,8 @@
       log("MindAR加载错误: " + event.detail);
     });
 
-    // 获取视频元素
+    // 检查视频是否加载
     const videoElement = document.getElementById('car-video');
-
-    // 当AR目标被识别到时触发视频播放
-    const markerEntity = document.getElementById('marker');
-    markerEntity.addEventListener('found', function() {
-      log("AR 目标已识别，开始播放视频...");
-      videoElement.play();  // 自动播放视频
-    });
-
-    // 检查视频是否加载并可以播放
     videoElement.oncanplay = function() {
       log("视频已加载并可以播放...");
     };
