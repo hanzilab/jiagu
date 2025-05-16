@@ -3,126 +3,125 @@
 <head>
   <meta charset="utf-8"/>
   <title>AR with Video</title>
-
-  <!-- A-Frame 與 MindAR 套件 -->
+  <!-- A-Frame & MindAR CDN -->
   <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-
-  <!-- 基本樣式 -->
   <style>
     body { margin: 0; overflow: hidden; }
     #log {
       position: absolute;
-      top: 20px;
+      top: 50px;
       left: 20px;
-      background-color: rgba(0, 0, 0, 0.6);
       color: white;
+      background-color: rgba(0, 0, 0, 0.7);
       padding: 10px;
-      font-size: 14px;
       font-family: Arial, sans-serif;
+      font-size: 14px;
       max-width: 90%;
-      max-height: 40%;
       overflow: auto;
-      z-index: 10;
+      max-height: 50%;
       white-space: pre-wrap;
+      z-index: 10;
     }
   </style>
 </head>
 <body>
 
-  <!-- 日誌輸出 -->
-  <div id="log">載入中...</div>
+  <!-- 日志容器 -->
+  <div id="log">初始化中...</div>
 
-  <!-- A-Frame AR 場景 -->
+  <!-- A-Frame + MindAR AR 場景 -->
   <a-scene
-    mindar-image="imageTargetSrc: targets.mind; autoStart: true; uiLoading: true; uiError: true; uiScanning: true"
+    mindar-image="imageTargetSrc: targets.mind; autoStart: true; uiLoading: true; uiError: true; uiScanning: true;"
     color-space="sRGB"
     renderer="colorManagement: true; physicallyCorrectLights: true"
     vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false"
     embedded
   >
-
     <!-- 燈光與相機 -->
     <a-light type="ambient" intensity="8"></a-light>
     <a-camera look-controls="enabled: false"></a-camera>
 
-    <!-- AR 標記物件 (目標索引 0) -->
+    <!-- AR 標記與影片 -->
     <a-entity id="marker" mindar-image-target="targetIndex: 0">
-      <a-video
-        src="#car-video"
-        width="1.2"
-        height="0.7"
-        position="0 0 0"
-        rotation="0 0 0"
-        autoplay="false"
-      ></a-video>
+      <a-video src="#car-video" width="1.2" height="0.7" position="0 0 0"></a-video>
     </a-entity>
 
-    <!-- 資產預載：影片 -->
+    <!-- 資產 -->
     <a-assets>
       <video
         id="car-video"
         src="car.mp4"
-        preload="auto"
+        autoplay
         loop
-        muted
         playsinline
+        muted
         crossorigin="anonymous"
       ></video>
     </a-assets>
   </a-scene>
 
-  <!-- 控制邏輯 -->
+  <!-- 腳本邏輯 -->
   <script>
-    const log = (msg) => {
-      const el = document.getElementById('log');
-      el.textContent += msg + "\n";
-      console.log(msg);
+    // 日志輸出
+    function log(message) {
+      const logElement = document.getElementById('log');
+      logElement.textContent += message + "\n";
+      console.log(message);
+    }
+
+    window.onload = function () {
+      log("頁面載入完成...");
     };
 
-    window.onload = () => {
-      log("頁面載入完成。");
+    // MindAR 狀態監聽
+    window.addEventListener('mindar-loaded', function () {
+      log("MindAR 加載完成...");
+    });
+
+    window.addEventListener('mindar-error', function (event) {
+      log("MindAR 加載錯誤: " + event.detail);
+    });
+
+    // 影片載入與播放控制
+    const videoElement = document.getElementById('car-video');
+    const marker = document.querySelector('#marker');
+
+    marker.addEventListener('targetFound', () => {
+      log("AR 標記已偵測到，播放影片...");
+      videoElement.play().catch(err => {
+        log("影片播放失敗：" + err);
+      });
+    });
+
+    marker.addEventListener('targetLost', () => {
+      log("AR 標記消失，暫停影片...");
+      videoElement.pause();
+    });
+
+    videoElement.oncanplay = function () {
+      log("影片已經準備好，可以播放");
     };
 
-    const video = document.getElementById('car-video');
-    const marker = document.getElementById('marker');
-
-    // 當影片準備好播放
-    video.oncanplay = () => {
-      log("影片已載入，可播放。");
-    };
-
-    video.onerror = () => {
+    videoElement.onerror = function () {
       log("影片載入錯誤！");
     };
-
-    // 當 AR 目標被偵測
-    marker.addEventListener('targetFound', () => {
-      log("偵測到 AR 圖像，播放影片...");
-      video.play().catch(err => log("影片播放失敗：" + err));
-    });
-
-    // 當 AR 目標遺失
-    marker.addEventListener('targetLost', () => {
-      log("AR 圖像遺失，暫停影片。");
-      video.pause();
-    });
 
     // 檢查攝像頭設備
     if (navigator.mediaDevices) {
       navigator.mediaDevices.enumerateDevices().then(devices => {
         const cameras = devices.filter(device => device.kind === 'videoinput');
-        if (cameras.length > 0) {
-          log("偵測到攝像頭數量：" + cameras.length);
+        if (cameras.length === 0) {
+          log("沒有檢測到攝像頭設備！");
         } else {
-          log("沒有偵測到攝像頭！");
+          log("找到攝像頭設備: " + cameras.length);
         }
       }).catch(err => {
-        log("攝像頭檢查失敗：" + err);
+        log("獲取攝像頭設備信息失敗: " + err);
       });
     } else {
-      log("此瀏覽器不支援 mediaDevices！");
+      log("瀏覽器不支援攝像頭檢查！");
     }
   </script>
 </body>
