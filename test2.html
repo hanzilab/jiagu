@@ -29,6 +29,8 @@
   <!-- 日志容器 -->
   <div id="log"></div>
 
+  <button id="playButton">点击播放视频</button>
+
   <a-scene
     mindar-image="imageTargetSrc: targets.mind; autoStart: true; uiLoading: true; uiError: true; uiScanning: true;"
     color-space="sRGB"
@@ -40,7 +42,7 @@
     <a-camera look-controls="enabled: false"></a-camera>
 
     <a-entity id="marker" mindar-image-target="targetIndex: 0">
-      <a-video src="#car-video" width="1.2" height="0.7" position="0 0 0" rotation="0 0 0"></a-video>
+      <a-video id="car-video" src="#car-video" width="1.2" height="0.7" position="0 0 0" rotation="0 0 0"></a-video>
     </a-entity>
 
     <a-assets>
@@ -62,6 +64,15 @@
       log("页面加载完成...");
     };
 
+    // 添加播放按钮事件
+    const playButton = document.getElementById('playButton');
+    const videoElement = document.getElementById('car-video');
+
+    playButton.addEventListener('click', function() {
+      log("按钮点击，开始播放视频...");
+      videoElement.play();  // 手动播放视频
+    });
+
     // 调试MindAR目标加载
     window.addEventListener('mindar-loaded', function() {
       log("MindAR加载完成...");
@@ -72,7 +83,6 @@
     });
 
     // 检查视频是否加载
-    const videoElement = document.getElementById('car-video');
     videoElement.oncanplay = function() {
       log("视频已加载并可以播放...");
     };
@@ -80,22 +90,6 @@
     videoElement.onerror = function() {
       log("视频加载错误！");
     };
-
-    // 检查摄像头权限
-    if (navigator.mediaDevices) {
-      navigator.mediaDevices.enumerateDevices().then(devices => {
-        const cameras = devices.filter(device => device.kind === 'videoinput');
-        if (cameras.length === 0) {
-          log("没有检测到摄像头设备！");
-        } else {
-          log("找到摄像头设备: " + cameras.length);
-        }
-      }).catch(err => {
-        log("获取摄像头设备信息失败: " + err);
-      });
-    } else {
-      log("浏览器不支持获取摄像头设备信息！");
-    }
   </script>
 </body>
 </html>
