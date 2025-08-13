@@ -19,7 +19,7 @@ body { margin: 0; overflow: hidden; }
     <video id="vid1" src="nu1.mp4" preload="auto" loop muted></video>
   </a-assets>
   <a-camera look-controls="enabled: false"></a-camera>
-  <a-entity mindar-image-target="targetIndex: 0">
+  <a-entity mindar-image-target="targetIndex: 1">
     <a-video id="plane1" src="#vid1" width="1.2" height="0.7" material="shader: flat"></a-video>
   </a-entity>
 </a-scene>
@@ -31,7 +31,7 @@ body { margin: 0; overflow: hidden; }
     <video id="vid2" src="nu2.mp4" preload="auto" loop muted></video>
   </a-assets>
   <a-camera look-controls="enabled: false"></a-camera>
-  <a-entity mindar-image-target="targetIndex: 0">
+  <a-entity mindar-image-target="targetIndex: 2">
     <a-video id="plane2" src="#vid2" width="1.2" height="0.7" material="shader: flat"></a-video>
   </a-entity>
 </a-scene>
@@ -43,16 +43,10 @@ body { margin: 0; overflow: hidden; }
     <video id="vid3" src="nu3.mp4" preload="auto" loop muted></video>
   </a-assets>
   <a-camera look-controls="enabled: false"></a-camera>
-  <a-entity mindar-image-target="targetIndex: 0">
+  <a-entity mindar-image-target="targetIndex: 3">
     <a-video id="plane3" src="#vid3" width="0.7" height="0.7" material="shader: flat"></a-video>
   </a-entity>
 </a-scene>
-<!-- 載入影片資源（要與 HTML 放在同一目錄） -->
-<a-assets>
-<video id="Vid1" src="nu1.mp4" preload="auto" loop muted></video>
-<video id="Vid2" src="nu2.mp4" preload="auto" loop muted></video>
-<video id="Vid3" src="nu3.mp4" preload="auto" loop muted></video>
-</a-assets>
 <!-- 環境光線，避免影片太暗 -->
 <a-light type="ambient" intensity="1.5"></a-light>
 <!-- 相機（禁止滑動視角） -->
@@ -86,3 +80,4 @@ video.currentTime = 0;
 </script>
 </body>
 </html>
+
